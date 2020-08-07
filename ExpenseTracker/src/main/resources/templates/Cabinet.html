@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cabinet</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div class="cabinet-wrap">
+    <div class="cabinet">
+        <h1>Cabinet</h1>
+        <!--        <div class="saldo">Saldo: &euro;10.350,25</div>-->
+        <div class="footer-buttons">
+            <div class="footer-button">
+                <div>Bank Account</div>
+                <div>Bank saldo: [[${bankSaldo}]]€</div>
+            </div>
+            <div class="footer-button">
+                <div>Cash Account</div>
+                <div>Cash saldo: [[${cashSaldo}]]€</div>
+            </div>
+            <div class="footer-button">
+                <div>Stock Account </div>
+                <div>Stock saldo: [[${stockSaldo}]]€</div>
+            </div>
+        </div>
+        <div class="total-button">
+            <div><span>Total saldo:</span> [[${totalBalance}]]€</div>
+        </div>
+        <div class="hr"></div>
+        <div class="select-style">
+            <select name="period" id="period">
+                <option selected disabled>Select period</option>
+                <option value="Current month">Current month</option>
+                <option value="Last 2 months">Last 2 months</option>
+                <option value="Last 6 months">Last 6 months</option>
+                <option value="All time">All time</option>
+            </select>
+        </div>
+        <div class="footer-buttons">
+            <div class="transaction-button">
+                <div>
+                    <a href="#" onclick="showTransactions('income');">&#10149; Income List</a>
+                </div>
+                <div>All income: [[${incomeBalance}]]€</div>
+            </div>
+            <div class="transaction-button">
+                <div>
+                    <a href="#" onclick="showTransactions('expenses');">&#10149; Expenses List</a>
+                </div>
+                <div>All expenses: [[${expensesBalance}]]€</div>
+            </div>
+
+        </div>
+        <div class="footer-buttons" style="margin-left: 15%;">
+
+            <a href="/transaction?type=income" class="footer-button"><span class="plus">&#10010;	</span> Income Transaction</a>
+            <a href="/transaction?type=expense" class="footer-button"><span class="plus">&#10010;	</span> Expense Transaction</a>
+        </div>
+    </div>
+</div>
+<script language="JavaScript">
+    function showTransactions(type){
+        var period = document.getElementById("period").value;
+        window.location = "/all/"+ type +"?period=" + period;
+
+    }
+</script>
+
+<style>
+    body{
+        margin:0;
+        color:#ffffff;
+        background: #84a7c8;
+        font:600 16px/18px 'Open Sans',sans-serif;
+    }
+    *,:after,:before{box-sizing:border-box}
+    .clearfix:after,.clearfix:before{content:'';display:table}
+    .clearfix:after{clear:both;display:block}
+    a{color:inherit;text-decoration:none}
+    .cabinet-wrap{
+        width:100%;
+        margin:auto;
+        margin-top: 30px;
+        max-width:900px;
+        min-height:670px;
+        position:relative;
+        background: #1b6d85;
+        box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+    }
+    .cabinet{
+        width:100%;
+        height:100%;
+        position:absolute;
+        padding:40px 70px 50px 70px;
+        background:rgba(40,57,101,.9);
+    }
+    .saldo-input > label,
+    .saldo-input > input{
+        font-size: 30px;
+    }
+    .saldo-input > input{
+        width: 50%;
+        margin-left: 20px;
+    }
+    .hr{
+        height:2px;
+        margin:20px 120px 20px 120px;
+        background:rgba(255,255,255,.2);
+    }
+    h1{
+        text-align: center;
+        margin-bottom: 70px;
+        color:white;
+        font-size: 46px;
+    }
+    .select-style {
+        display: block;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+        width: 240px;
+        border-radius: 3px;
+        overflow: hidden;
+        background: #fafafa;
+        font-size: 40px;
+    }
+    .select-style select {
+        padding: 5px 8px;
+        width: 130%;
+        border: none;
+        box-shadow: none;
+        background: transparent;
+        background-image: none;
+        -webkit-appearance: none;
+        font-size: 18px;
+    }
+    .select-style select:focus {
+        outline: none;
+    }
+    .footer-buttons{
+        margin-top: 50px;
+        width:100%;
+        display: block;
+    }
+    .footer-button{
+        display: inline-block;
+        width:32%;
+        text-align: center;
+        padding: 10px;
+        border: 2px dotted #1b6d85;
+        background: #84a7c8;
+    }
+    .transaction-button{
+        display: inline-block;
+        width:48%;
+        text-align: center;
+        padding: 10px;
+        border: 2px dotted #1b6d85;
+        background: #84a7c8;
+    }
+    .total-button{
+        margin-top: 10px;
+    }
+    .total-button > div{
+        margin: 0 auto;
+        width: 50%;
+        text-align: center;
+        padding: 10px;
+        border: 2px dotted #1b6d85;
+        background: #84a7c8;
+    }
+    .total-button > div > span{
+        color: #1b08a4;
+    }
+    .plus{
+        color:black;
+    }
+    .footer-button:nth-child(1) > div:first-child,
+    .footer-button:nth-child(2) > div:first-child,
+    .footer-button:nth-child(3) > div:first-child{
+        color:green;
+    }
+    .transaction-button > div:first-child{
+        color: #c6292e;
+    }
+    .transaction-button > div:last-child{
+        color: black;
+    }
+    .footer-button:nth-child(1) > div:last-child,
+    .footer-button:nth-child(2) > div:last-child,
+    .footer-button:nth-child(3) > div:last-child{
+        color:black;
+        font-size:14px;
+    }
+    .footer-button:nth-child(2){
+        color:green;
+    }
+    .footer-button:nth-child(3){
+        color:red;
+    }
+
+</style>
+</body>
+</htmL>

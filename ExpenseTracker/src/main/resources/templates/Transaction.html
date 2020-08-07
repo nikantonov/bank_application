@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New Transaction</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div class="cabinet-wrap">
+    <div class="cabinet">
+        <h1>New Transaction</h1>
+        <div class="transaction-html">
+            <form method="POST"  th:action="@{/add/transaction}">
+                <div class="input-group">
+                    <input class="transaction-input" type="text" placeholder="&euro; 0,00"  th:name="amount"
+                           autocomplete="off">
+                </div>
+                <div class="select">
+                    <select  th:name="category" th:if="${#request.getParameter('type') == 'expense'}">
+                        <option selected disabled>Category</option>
+                        <option value="Home">Home</option>
+                        <option value="Food">Food</option>
+                        <option value="Education">Education</option>
+                        <option value="Health">Health</option>
+                        <option value="Transport&Auto">Transport&Auto</option>
+                        <option value="Travel">Travel</option>
+
+                    </select>
+                    <select  th:name="category" th:if="${#request.getParameter('type') == 'income'}">
+                        <option selected disabled>Category</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Dividend">Dividend</option>
+                        <option value="Freelance">Freelance</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="select">
+                    <select  th:name="account">
+                        <option selected disabled>Account</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Bank account">Bank account</option>
+                        <option value="Stock">Stock</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <input class="transaction-input" type="date" placeholder="Date of transaction"  th:name="date">
+                </div>
+                <div class="input-group">
+                    <input class="transaction-input" type="text" placeholder="Description"  th:name="description">
+                </div>
+                <div class="p-t-10">
+                    <a class="btn btn--pill btn--red" href="javascript:history.go(-1);">Cancel</a>
+                    <a class="btn btn--pill btn--pink" href="#" id="salary-button">Salary</a>
+                    <a class="btn btn--pill btn--yellow" href="#" id="ensurance-button">Insurance</a>
+                    <button class="btn btn--pill btn--green" type="submit">Confirm</button>
+                </div>
+             <input th:name="type" th:type="hidden" th:value="${#request.getParameter('type')}">
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+    body{
+        margin:0;
+        color:#ffffff;
+        background: #84a7c8;
+        font:600 16px/18px 'Open Sans',sans-serif;
+    }
+    *,:after,:before{box-sizing:border-box}
+    .clearfix:after,.clearfix:before{content:'';display:table}
+    .clearfix:after{clear:both;display:block}
+    a{color:inherit;text-decoration:none}
+    .cabinet-wrap{
+        width:100%;
+        margin:auto;
+        margin-top: 30px;
+        max-width:900px;
+        min-height:400px;
+        position:relative;
+        background: #1b6d85;
+        box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+    }
+    .cabinet{
+        width:100%;
+        position:absolute;
+        padding:40px 70px 50px 70px;
+        background:rgba(40,57,101,.9);
+    }
+    h1{
+        text-align: center;
+        margin-bottom: 70px;
+        color:white;
+        font-size: 46px;
+    }
+    .transaction-html{
+        width:60%;
+        margin: 0 auto;
+    }
+    .p-t-10 {
+        padding-top: 10px;
+        text-align: center;
+    }
+    .btn {
+        display: inline-block;
+        line-height: 40px;
+        padding: 0 23px;
+        font-family: Poppins, Arial, "Helvetica Neue", sans-serif;
+        cursor: pointer;
+        color: #fff;
+        -webkit-transition: all 0.4s ease;
+        -o-transition: all 0.4s ease;
+        -moz-transition: all 0.4s ease;
+        transition: all 0.4s ease;
+        font-size: 16px;
+    }
+    .btn--pill {
+        -webkit-border-radius: 20px;
+        -moz-border-radius: 20px;
+        border-radius: 20px;
+    }
+    .btn--green {
+        background: #57b846;
+    }
+    .btn--green:hover {
+        background: #418930;
+    }
+
+    .btn--red {
+        background: #f34a3c;
+    }
+    .btn--red:hover {
+        background: #ae2432;
+    }
+
+    input {
+        outline: none;
+        margin: 0;
+        border: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        width: 100%;
+        font-size: 14px;
+        font-family: inherit;
+    }
+
+    .input-group {
+        position: relative;
+        margin-bottom: 33px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .transaction-input {
+        padding: 5px 0;
+        font-size: 16px;
+        color: #ccc;
+        background: transparent;
+    }
+    .transaction-input::-webkit-input-placeholder {
+        color: #ccc;
+    }
+    .transaction-input:-moz-placeholder {
+        color: #ccc;
+        opacity: 1;
+    }
+    .transaction-input::-moz-placeholder {
+        color: #ccc;
+        opacity: 1;
+    }
+    .transaction-input:-ms-input-placeholder {
+        color: #ccc;
+    }
+    .transaction-input:-ms-input-placeholder {
+        color: #ccc;
+    }
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        appearance: none;
+        outline: 0;
+        box-shadow: none;
+        border: 0 !important;
+        background: #2c3e50;
+        background-image: none;
+    }
+    /* Remove IE arrow */
+    select::-ms-expand {
+        display: none;
+    }
+    /* Custom Select */
+    .select {
+        position: relative;
+        display: flex;
+        width: 20em;
+        height: 3em;
+        line-height: 3;
+        background: #2c3e50;
+        overflow: hidden;
+        border-radius: .25em;
+        margin-bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    select {
+        flex: 1;
+        padding: 0 .5em;
+        color: #fff;
+        cursor: pointer;
+    }
+    /* Arrow */
+    .select::after {
+        content: '\25BC';
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0 1em;
+        background: #34495e;
+        cursor: pointer;
+        pointer-events: none;
+        -webkit-transition: .25s all ease;
+        -o-transition: .25s all ease;
+        transition: .25s all ease;
+    }
+    /* Transition */
+    .select:hover::after {
+        color: #f39c12;
+    }
+    .btn--pink {
+        background: pink;
+    }
+    .btn--pink:hover {
+        background: hotpink;
+    }
+
+    .btn--yellow {
+        background: yellow;
+    }
+    .btn--yellow:hover {
+        background: #ffc40f;
+    }
+
+</style>
+<script>
+    window.onload = function() {
+        let amount = document.getElementsByClassName('transaction-input')[0],
+            categoryExpense = document.getElementsByClassName('select')[0].firstElementChild,
+            categoryIncome = document.getElementsByClassName('select')[0].firstElementChild.nextElementSibling,
+            account = document.getElementsByClassName('select')[1].firstElementChild,
+            date = document.getElementsByClassName('transaction-input')[1],
+            description = document.getElementsByClassName('transaction-input')[2],
+            salaryButton = document.getElementsByClassName('btn btn--pill btn--pink')[0],
+            ensuranceButton = document.getElementsByClassName('btn btn--pill btn--yellow')[0];
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const type = urlParams.get('type');
+
+        if(type == "expense"){
+            salaryButton.style.display = 'none';
+        }
+        if(type == "income"){
+            ensuranceButton.style.display = 'none';
+        }
+
+        function getLastDayOfMonthDate() {
+            let date = new Date();
+            let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            let day = lastDay.getDate(),
+                month = ('0' + (lastDay.getMonth()+1)).slice(-2),
+                year = lastDay.getFullYear();
+            return year + '-' + month + '-' + day;
+        }
+
+        function fillSalary() {
+            amount.value = 1000;
+            categoryExpense.value = "Salary";
+            account.value = "Bank account";
+            date.value = getLastDayOfMonthDate();
+            description.value = "Current month salary";
+        }
+
+        function fillEnsurance() {
+            amount.value = 65;
+            categoryExpense.value = "Health";
+            account.value = "Bank account";
+            date.value = getLastDayOfMonthDate();
+            description.value = "Current month insurance";
+        }
+        document.getElementById ("salary-button").addEventListener ("click", fillSalary, false);
+        document.getElementById ("ensurance-button").addEventListener ("click", fillEnsurance, false);
+    };
+</script>
+</body>
+</htmL>

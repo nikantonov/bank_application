@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Diagram - Expense</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="/canvas.min.js"></script>
+    <style>
+        body{
+            margin:0;
+            color:#ffffff;
+            background: #84a7c8;
+            font:600 16px/18px 'Open Sans',sans-serif;
+        }
+        *,:after,:before{box-sizing:border-box}
+        .clearfix:after,.clearfix:before{content:'';display:table}
+        .clearfix:after{clear:both;display:block}
+        a{color:inherit;text-decoration:none}
+        .cabinet-wrap{
+            width:100%;
+            margin:auto;
+            margin-top: 30px;
+            max-width:900px;
+            min-height:670px;
+            position:relative;
+            background: #1b6d85;
+            box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+        }
+        .category-image{
+            width: 75px;
+        }
+        .category-title{
+            padding-top: 20px;
+        }
+        .cabinet{
+            width:100%;
+            position:absolute;
+            padding:40px 70px 50px 70px;
+            background:rgba(40,57,101,.9);
+        }
+
+        h1{
+            text-align: center;
+            margin-bottom: 70px;
+            color:white;
+            font-size: 46px;
+        }
+
+        .wrapper {
+            display: grid;
+            grid-gap: 10px;
+            grid-template-columns: 20% 60% 20%;
+
+            color: #444;
+        }
+
+        .box {
+            color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            font-size: 150%;
+            text-align: center;
+        }
+
+        .a {
+            grid-column: 1 ;
+            grid-row: 1 ;
+            background-color: #2d2d2d;
+            border: 3px double silver;
+            color: #5a92ff;
+        }
+        .b {
+            grid-column: 1 ;
+            grid-row: 2 ;
+            background-color: #2d2d2d;
+            border: 3px double silver;
+            color: #d35540;
+        }
+        .c {
+            grid-column: 1 ;
+            grid-row: 3 ;
+            background-color: #2d2d2d;
+            border: 3px double silver;
+            color: #9eafd3;
+        }
+
+        .d {
+            grid-column: 2 ;
+            grid-row: 1 / span 2;
+            align-self: center;
+        }
+        .e {
+            grid-column: 2 ;
+            grid-row: 3 / span 2;
+        }
+        .f {
+            grid-column: 3 ;
+            grid-row: 1 ;
+            background-color: #2d2d2d;
+            border: 3px double silver;
+            color: yellow;
+        }
+        .g {
+            grid-column: 3 ;
+            grid-row: 2 ;
+            background-color: #2d2d2d;
+            border: 3px double silver;
+            color: #6f680e;
+        }
+        .h {
+            grid-column: 3 ;
+            grid-row: 3;
+            background-color: #2d2d2d;
+            border: 3px double silver;
+            color: #00ab00;
+        }
+        .watch-diagram-block{
+            display: block;
+            margin: 0 auto;
+            width: 250px;
+            margin-top: 20px;
+        }
+        .link-button{
+            text-align: center;
+            background-color: aquamarine;
+            width:100%;
+            color:black;
+            display:block;
+            font-size:14px;
+            text-transform:uppercase;
+            font-weight: bold;
+            border:1px solid green;
+            padding:10px 15px;
+            border-radius: 50px;
+        }
+        .diagram-button{
+            background-color: coral;
+            border:1px solid yellow;
+        }
+
+    </style>
+</head>
+<body>
+<div class="cabinet-wrap">
+    <div class="cabinet">
+        <h1>Diagram - Expense</h1>
+        <div class="wrapper">
+            <div class="box a">
+                <img class="category-image" src="/buildings.png">
+                <div class="category-title">Home</div>
+            </div>
+            <div class="box b">
+                <img class="category-image" src="/diet.png">
+                <div class="category-title">Food</div>
+            </div>
+            <div class="box c">
+                <img class="category-image" src="/bag.png">
+                <div class="category-title">Education</div>
+            </div>
+            <div class="box d">
+                <canvas class="chart" id="chart"></canvas>
+            </div>
+            <div class="box e">  <canvas class="chart" id="chart2"></canvas></div>
+            <div class="box f">
+                <img class="category-image" src="/heart.png">
+                <div class="category-title">Health</div>
+            </div>
+            <div class="box g">
+                <img class="category-image" src="/automobile.png">
+                <div class="category-title">Transport</div>
+            </div>
+            <div class="box h">
+                <img class="category-image" src="/travel.png">
+                <div class="category-title">Travel</div>
+            </div>
+        </div>
+
+        <div class="watch-diagram-block">
+            <a class="link-button diagram-button" href="/cabinet"> Cabinet</a>
+        </div>
+
+    </div>
+</div>
+<script th:inline="javascript">
+
+    window.chartColors = {
+        HOME: '#5a92ff',
+        FOOD: '#d35540',
+        EDUCATION: '#9eafd3 ',
+        HEALTH: 'yellow',
+        TRANSPORT: '#6f680e',
+        TRAVEL: '#00ab00'
+    };
+
+    var homePercentage = "[[${homePercentage}]]";
+    var foodPercentage = "[[${foodPercentage}]]";
+    var educationPercentage = "[[${educationPercentage}]]";
+    var healthPercentage = "[[${healthPercentage}]]";
+    var transportPercentage = "[[${transportPercentage}]]";
+    var travelPercentage = "[[${travelPercentage}]]";
+
+    var config = {
+        type: 'pie',
+        data: {
+            datasets: [{
+                borderWidth: 0,
+                data: [
+                    homePercentage,
+                    foodPercentage,
+                    educationPercentage,
+                    healthPercentage,
+                    transportPercentage,
+                    travelPercentage
+                ],
+                backgroundColor: [
+                    window.chartColors.HOME,
+                    window.chartColors.FOOD,
+                    window.chartColors.EDUCATION,
+                    window.chartColors.HEALTH,
+                    window.chartColors.TRANSPORT,
+                    window.chartColors.TRAVEL,
+                ],
+                label: ''
+            }],
+            labels: [
+                'HOME',
+                'FOOD',
+                'EDUCATION',
+                'HEALTH',
+                'TRANSPORT',
+                'TRAVEL'
+
+            ]
+        },
+        options: {
+            tooltips: {
+                enabled:false
+            },
+            responsive: true,
+            legend: {
+                display: false
+            }
+        }
+    };
+
+    var config2 = {
+        type: 'bar',
+        data: {
+            datasets: [{
+                borderWidth: 0,
+                data: [
+                    homePercentage,
+                    foodPercentage,
+                    educationPercentage,
+                    healthPercentage,
+                    transportPercentage,
+                    travelPercentage
+                ],
+                backgroundColor: [
+                    window.chartColors.HOME,
+                    window.chartColors.FOOD,
+                    window.chartColors.EDUCATION,
+                    window.chartColors.HEALTH,
+                    window.chartColors.TRANSPORT,
+                    window.chartColors.TRAVEL,
+                ],
+                label: ''
+            }],
+            labels: [
+                'HOME',
+                'FOOD',
+                'EDUCATION',
+                'HEALTH',
+                'TRANSPORT',
+                'TRAVEL'
+
+            ]
+        },
+        options: {
+            tooltips: {
+                enabled:false
+            },
+            responsive: true,
+            legend: {
+                display: false
+            }
+        }
+    };
+    window.onload = function() {
+        var ctx = document.getElementById('chart').getContext('2d');
+        var ctx2 = document.getElementById('chart2').getContext('2d');
+        window.myPie = new Chart(ctx, config);
+        window.myBarChart = new Chart(ctx2, config2);
+    };
+
+
+
+</script>
+</body>
+</htmL>
